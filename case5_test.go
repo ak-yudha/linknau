@@ -17,7 +17,7 @@ func (m *MockProcessor) Process(number int) int {
 	return args.Int(0)
 }
 
-// TestProcessNumbers menguji fungsi ProcessNumbers.
+// TestProcessNumbers menguji fungsi ProcessNumbers
 func TestProcessNumbers(t *testing.T) {
 	numbers := []int{1, 2, 3, 4, 5}
 
