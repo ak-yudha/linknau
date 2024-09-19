@@ -6,15 +6,12 @@ import (
 	"sync"
 )
 
-// Processor adalah antarmuka yang mendefinisikan metode pemrosesan.
 type Processor interface {
 	Process(number int) int
 }
 
-// SquareProcessor adalah implementasi konkret dari Processor.
 type SquareProcessor struct{}
 
-// Process menghitung kuadrat dari sebuah angka.
 func (p *SquareProcessor) Process(number int) int {
 	return number * number
 }

@@ -7,22 +7,18 @@ import (
 	"time"
 )
 
-// Secret key to sign the token
 var jwtSecret = []byte("mySecretKey")
 
-// Struct for login credentials
 type LoginCredentials struct {
 	Username string `json:"username" binding:"required"`
 	Password string `json:"password" binding:"required"`
 }
 
-// Struct for JWT claims
 type Claims struct {
 	Username string `json:"username"`
 	jwt.StandardClaims
 }
 
-// Function to generate JWT token
 func generateToken(username string) (string, error) {
 	// Set token expiration time
 	expirationTime := time.Now().Add(1 * time.Hour)
@@ -47,7 +43,6 @@ func generateToken(username string) (string, error) {
 	return tokenString, nil
 }
 
-// Function to authenticate and issue JWT token
 func login(c *gin.Context) {
 	var credentials LoginCredentials
 
@@ -57,7 +52,7 @@ func login(c *gin.Context) {
 		return
 	}
 
-	// For simplicity, use hardcoded username/password
+	// use hardcoded username/password
 	if credentials.Username != "admin" || credentials.Password != "password" {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid username or password"})
 		return
@@ -70,16 +65,13 @@ func login(c *gin.Context) {
 		return
 	}
 
-	// Return token as response
 	c.JSON(http.StatusOK, gin.H{"token": token})
 }
 
-// Middleware to validate JWT
 func authMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		tokenString := c.GetHeader("Authorization")
 
-		// If token is missing
 		if tokenString == "" {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "Authorization token required"})
 			c.Abort()
@@ -115,13 +107,7 @@ func protected(c *gin.Context) {
 
 func main() {
 	r := gin.Default()
-
-	// Public route for login
 	r.POST("/login", login)
-
-	// Protected route with JWT middleware
 	r.GET("/protected", authMiddleware(), protected)
-
-	// Run the server
 	r.Run(":8080")
 }
